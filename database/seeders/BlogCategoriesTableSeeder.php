@@ -2,8 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class BlogCategoriesTableSeeder extends Seeder
@@ -17,21 +18,26 @@ class BlogCategoriesTableSeeder extends Seeder
     {
         $categories = [];
         $categoryName = 'Без категорії';
+        $dateTime = Carbon::now();
 
         $categories[] = [
-            'title'     => $categoryName,
-            'slug'      => Str::slug($categoryName),
-            'parent_id' => 0
+            'title'      => $categoryName,
+            'slug'       => Str::slug($categoryName),
+            'parent_id'  => 0,
+            'created_at' => $dateTime,
+            'updated_at' => $dateTime,
         ];
 
-        for ($i = 1; $i <= 10; $i++) {
+        for ($i = 2; $i <= 11; $i++) {
             $categoryName = 'Категорія ' . $i;
             $parentId = ($i > 4) ? rand(1, 4) : 1;
 
             $categories[] = [
-                'title'     => $categoryName,
-                'slug'      => Str::slug($categoryName),
-                'parent_id' => $parentId
+                'title'      => $categoryName,
+                'slug'       => Str::slug($categoryName),
+                'parent_id'  => $parentId,
+                'created_at' => $dateTime,
+                'updated_at' => $dateTime,
             ];
         }
 

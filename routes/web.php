@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Blog\Admin\CategoryController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,6 +16,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::group(['prefix' => 'admin/blog'], function () {
+    Route::resource('categories', CategoryController::class)->names('blog.admin.categories');
 });
 
 Route::get('/dashboard', function () {
