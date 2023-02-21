@@ -13,7 +13,7 @@ class CategoryController extends BaseController
     /**
      * @var BlogCategoryRepository
      */
-    private $blogCategoryRepository;
+    private BlogCategoryRepository $blogCategoryRepository;
 
     public function __construct()
     {
@@ -29,7 +29,7 @@ class CategoryController extends BaseController
      */
     public function index()
     {
-        $paginator = $this->blogCategoryRepository->getAllWithPaginate(15);
+        $paginator = $this->blogCategoryRepository->getAllWithPaginate(10);
 
         return view('blog.admin.categories.index', compact('paginator'));
     }
@@ -52,7 +52,7 @@ class CategoryController extends BaseController
      *
      * @param  BlogCategoryCreateRequest  $request
      *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(BlogCategoryCreateRequest $request)
     {

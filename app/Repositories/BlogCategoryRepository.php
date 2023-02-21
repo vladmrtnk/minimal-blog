@@ -18,18 +18,18 @@ class BlogCategoryRepository extends CoreRepository
     /**
      * Get all categories with paginate
      *
-     * @param  int|null  $perPage
+     * @param  int  $perPage
      *
      * @return \Illuminate\Contracts\Pagination\Paginator
      */
-    public function getAllWithPaginate(int $perPage = null)
+    public function getAllWithPaginate(int $perPage = 15)
     {
         $columns = ['id', 'title', 'parent_id'];
 
         $result = $this
             ->startCondition()
             ->select($columns)
-            ->paginate(15);
+            ->paginate($perPage);
 
         return $result;
     }
