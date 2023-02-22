@@ -3,47 +3,47 @@
 namespace App\Http\Controllers\Api\V1\Blog;
 
 use App\Http\Controllers\Api\V1\BaseController;
-use App\Http\Requests\BlogCategoryCreateRequest;
-use App\Http\Requests\BlogCategoryUpdateRequest;
-use App\Http\Resources\BlogCategoryCollection;
-use App\Http\Resources\BlogCategoryResource;
-use App\Models\BlogCategory;
+use App\Http\Requests\BlogPostCreateRequest;
+use App\Http\Requests\BlogPostUpdateRequest;
+use App\Http\Resources\BlogPostCollection;
+use App\Http\Resources\BlogPostResource;
+use App\Models\BlogPost;
 use Illuminate\Http\JsonResponse;
 use Str;
 use Symfony\Component\HttpFoundation\Response;
 
-class CategoryController extends BaseController
+class PostController extends BaseController
 {
     /**
-     * @var \App\Models\BlogCategory
+     * @var \App\Models\BlogPost
      */
-    private BlogCategory $blogCategory;
+    private mixed $blogPost;
 
     public function __construct()
     {
         parent::__construct();
 
-        $this->blogCategory = app(BlogCategory::class);
+        $this->blogPost = app(BlogPost::class);
     }
 
     /**
      * Display a listing of the resource.
      *
-     * @return \App\Http\Resources\BlogCategoryCollection
+     * @return \App\Http\Resources\BlogPostCollection
      */
-    public function index(): BlogCategoryCollection
+    public function index(): BlogPostCollection
     {
-        return new BlogCategoryCollection($this->blogCategory->paginate(15));
+        return new BlogPostCollection($this->blogPost->paginate(15));
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param \App\Http\Requests\BlogCategoryCreateRequest $request
+     * @param \App\Http\Requests\BlogPostCreateRequest $request
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(BlogCategoryCreateRequest $request): JsonResponse
+    public function store(BlogPostCreateRequest $request): JsonResponse
     {
         $data = $request->validated();
 
@@ -51,9 +51,9 @@ class CategoryController extends BaseController
             $data['slug'] = Str::slug($data['title']);
         }
 
-        $entity = (new BlogCategory())->create($data);
+        $entity = (new BlogPost())->create($data);
 
-        return (new BlogCategoryResource($entity))
+        return (new BlogPostResource($entity))
             ->additional(['message' => __('Successfully created!')])
             ->response()
             ->setStatusCode(Response::HTTP_CREATED);
@@ -64,26 +64,26 @@ class CategoryController extends BaseController
      *
      * @param int $id
      *
-     * @return \App\Http\Resources\BlogCategoryResource
+     * @return \App\Http\Resources\BlogPostResource
      */
-    public function show(int $id): BlogCategoryResource
+    public function show(int $id): BlogPostResource
     {
-        $entity = $this->blogCategory->findOrFail($id);
+        $entity = $this->blogPost->findOrFail($id);
 
-        return new BlogCategoryResource($entity);
+        return new BlogPostResource($entity);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param \App\Http\Requests\BlogCategoryUpdateRequest $request
-     * @param int                                          $id
+     * @param \App\Http\Requests\BlogPostUpdateRequest $request
+     * @param int                                      $id
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(BlogCategoryUpdateRequest $request, int $id): JsonResponse
+    public function update(BlogPostUpdateRequest $request, int $id): JsonResponse
     {
-        $entity = $this->blogCategory->findOrFail($id);
+        $entity = $this->blogPost->findOrFail($id);
         $data = $request->validated();
 
         if (empty($data['slug'])) {
@@ -92,7 +92,7 @@ class CategoryController extends BaseController
 
         $entity->update($data);
 
-        return (new BlogCategoryResource($entity))
+        return (new BlogPostResource($entity))
             ->additional(['message' => __('Successfully updated!')])
             ->response()
             ->setStatusCode(Response::HTTP_ACCEPTED);
@@ -107,7 +107,7 @@ class CategoryController extends BaseController
      */
     public function destroy(int $id): JsonResponse
     {
-        $this->blogCategory->findOrFail($id)->delete();
+        $this->blogPost->findOrFail($id)->delete();
 
         return response()
             ->json(['message' => trans('Successfully deleted!'),])

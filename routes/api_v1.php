@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\V1\Blog\CategoryController;
+use App\Http\Controllers\Api\V1\Blog\PostController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -20,5 +21,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::group(['prefix' => 'blog'], function () {
-    Route::resource('categories', CategoryController::class)->names('api.blog.admin.categories');
+    Route::resource('categories', CategoryController::class)->names('api.v1.blog.admin.categories');
+    Route::resource('posts', PostController::class)->names('api.v1.blog.admin.posts');
 });
