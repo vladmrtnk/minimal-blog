@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\API\V1;
 
-use App\Models\BlogPost;
+use App\Models\Blog\Post;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -23,7 +23,7 @@ class BlogPostTest extends TestCase
 
     public function test_get_single_entity()
     {
-        $entity = BlogPost::factory()->create();
+        $entity = Post::factory()->create();
 
         $response = $this->get($this->url . $entity->id);
 

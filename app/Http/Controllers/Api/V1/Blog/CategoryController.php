@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Api\V1\Blog;
 
 use App\Http\Controllers\Api\V1\BaseController;
-use App\Http\Requests\BlogCategoryCreateRequest;
-use App\Http\Requests\BlogCategoryUpdateRequest;
+use App\Http\Requests\API\V1\Blog\CategoryCreateRequest;
+use App\Http\Requests\API\V1\Blog\CategoryUpdateRequest;
 use App\Http\Resources\BlogCategoryCollection;
 use App\Http\Resources\BlogCategoryResource;
-use App\Models\BlogCategory;
+use App\Models\Blog\Category;
 use Illuminate\Http\JsonResponse;
 use Str;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,15 +15,15 @@ use Symfony\Component\HttpFoundation\Response;
 class CategoryController extends BaseController
 {
     /**
-     * @var \App\Models\BlogCategory
+     * @var \App\Models\Blog\Category
      */
-    private BlogCategory $blogCategory;
+    private Category $blogCategory;
 
     public function __construct()
     {
         parent::__construct();
 
-        $this->blogCategory = app(BlogCategory::class);
+        $this->blogCategory = app(Category::class);
     }
 
     /**
@@ -39,11 +39,11 @@ class CategoryController extends BaseController
     /**
      * Store a newly created resource in storage.
      *
-     * @param \App\Http\Requests\BlogCategoryCreateRequest $request
+     * @param \App\Http\Requests\API\V1\Blog\CategoryCreateRequest $request
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(BlogCategoryCreateRequest $request): JsonResponse
+    public function store(CategoryCreateRequest $request): JsonResponse
     {
         $data = $request->validated();
 
@@ -51,7 +51,7 @@ class CategoryController extends BaseController
             $data['slug'] = Str::slug($data['title']);
         }
 
-        $entity = (new BlogCategory())->create($data);
+        $entity = (new Category())->create($data);
 
         return (new BlogCategoryResource($entity))
             ->additional(['message' => __('Successfully created!')])
@@ -76,20 +76,15 @@ class CategoryController extends BaseController
     /**
      * Update the specified resource in storage.
      *
-     * @param \App\Http\Requests\BlogCategoryUpdateRequest $request
-     * @param int                                          $id
+     * @param \App\Http\Requests\API\V1\Blog\CategoryUpdateRequest $request
+     * @param int                                                  $id
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(BlogCategoryUpdateRequest $request, int $id): JsonResponse
+    public function update(CategoryUpdateRequest $request, int $id): JsonResponse
     {
         $entity = $this->blogCategory->findOrFail($id);
         $data = $request->validated();
-
-        if (empty($data['slug'])) {
-            $data['slug'] = Str::slug($data['title']);
-        }
-
         $entity->update($data);
 
         return (new BlogCategoryResource($entity))

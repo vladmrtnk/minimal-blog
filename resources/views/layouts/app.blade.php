@@ -15,8 +15,8 @@
 
         <!-- Scripts -->
         <script src="{{ asset('js/app.js') }}" defer></script>
-        <script src="https://unpkg.com/flowbite@1.4.6/dist/flowbite.js"></script>
-
+        <script src="{{ asset('https://unpkg.com/flowbite@1.4.6/dist/flowbite.js') }}"></script>
+        <x-head.tinymce-config/>
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">

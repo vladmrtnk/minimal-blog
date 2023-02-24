@@ -1,25 +1,27 @@
 <?php
 
-namespace App\Http\Controllers\Blog\Admin;
+namespace App\Http\Controllers\Dashboard\Blog;
 
-use App\Http\Requests\BlogCategoryCreateRequest;
-use App\Http\Requests\BlogCategoryUpdateRequest;
-use App\Models\BlogCategory;
-use App\Repositories\BlogCategoryRepository;
+use App\Http\Requests\Blog\CategoryCreateRequest;
+use App\Http\Requests\Blog\CategoryUpdateRequest;
+use App\Models\Blog\Category;
+use App\Repositories\Blog\CategoryRepository;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 use Str;
 
 class CategoryController extends BaseController
 {
     /**
-     * @var BlogCategoryRepository
+     * @var CategoryRepository
      */
-    private BlogCategoryRepository $blogCategoryRepository;
+    private CategoryRepository $blogCategoryRepository;
 
     public function __construct()
     {
         parent::__construct();
 
-        $this->blogCategoryRepository = app(BlogCategoryRepository::class);
+        $this->blogCategoryRepository = app(CategoryRepository::class);
     }
 
     /**
@@ -27,11 +29,11 @@ class CategoryController extends BaseController
      *
      * @return \Illuminate\View\View
      */
-    public function index()
+    public function index(): View
     {
         $paginator = $this->blogCategoryRepository->getAllWithPaginate(10);
 
-        return view('blog.admin.categories.index', compact('paginator'));
+        return view('dashboard.blog.categories.index', compact('paginator'));
     }
 
     /**
@@ -39,34 +41,34 @@ class CategoryController extends BaseController
      *
      * @return \Illuminate\View\View
      */
-    public function create()
+    public function create(): View
     {
-        $item = new BlogCategory();
+        $item = new Category();
         $categoryList = $this->blogCategoryRepository->getComboBox();
 
-        return view('blog.admin.categories.edit', compact('item', 'categoryList'));
+        return view('dashboard.blog.categories.edit', compact('item', 'categoryList'));
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  BlogCategoryCreateRequest  $request
+     * @param  CategoryCreateRequest $request
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(BlogCategoryCreateRequest $request)
+    public function store(CategoryCreateRequest $request): RedirectResponse
     {
-        $data = $request->input();
+        $data = $request->validated();
 
         if (empty($data['slug'])) {
             $data['slug'] = Str::slug($data['title']);
         }
 
-        $item = (new BlogCategory())->create($data);
+        $item = (new Category())->create($data);
 
         if ($item) {
             return redirect()
-                ->route('blog.admin.categories.edit', $item->id)
+                ->route('dashboard.blog.categories.edit', $item->id)
                 ->with(['success' => 'Успішно збережено']);
         } else {
             return back()
@@ -90,12 +92,11 @@ class CategoryController extends BaseController
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
-     * @param  BlogCategoryRepository  $blogCategoryRepository
+     * @param int $id
      *
      * @return \Illuminate\View\View
      */
-    public function edit(int $id)
+    public function edit(int $id): View
     {
         $item = $this->blogCategoryRepository->getEdit($id);
         $categoryList = $this->blogCategoryRepository->getComboBox();
@@ -104,19 +105,20 @@ class CategoryController extends BaseController
             abort(404);
         }
 
-        return view('blog.admin.categories.edit', compact('item', 'categoryList'));
+        return view('dashboard.blog.categories.edit', compact('item', 'categoryList'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  BlogCategoryUpdateRequest  $request
-     * @param  int  $id
+     * @param  CategoryUpdateRequest $request
+     * @param  int                   $id
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(BlogCategoryUpdateRequest $request, $id)
+    public function update(CategoryUpdateRequest $request, $id): RedirectResponse
     {
+
         $item = $this->blogCategoryRepository->getEdit($id);
         if (empty($item)) {
             return back()
@@ -124,7 +126,7 @@ class CategoryController extends BaseController
                 ->withInput();
         }
 
-        $data = $request->input();
+        $data = $request->validated();
         if (empty($data['slug'])) {
             $data['slug'] = Str::slug($data['title']);
         }
@@ -132,7 +134,7 @@ class CategoryController extends BaseController
         $result = $item->update($data);
         if ($result) {
             return redirect()
-                ->route('blog.admin.categories.edit', $item->id)
+                ->route('dashboard.blog.categories.edit', $item->id)
                 ->with(['success' => 'Успішно оновлено']);
         } else {
             return back()

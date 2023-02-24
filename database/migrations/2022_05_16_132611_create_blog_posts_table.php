@@ -22,9 +22,7 @@ return new class extends Migration
             $table->string('title');
 
             $table->text('excerpt')->nullable();
-
-            $table->text('content_raw');
-            $table->text('content_html');
+            $table->text('content');
 
             $table->boolean('is_published')->default(false);
             $table->timestamp('published_at')->nullable();

@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Api\V1\Blog;
 
 use App\Http\Controllers\Api\V1\BaseController;
-use App\Http\Requests\BlogPostCreateRequest;
-use App\Http\Requests\BlogPostUpdateRequest;
+use App\Http\Requests\API\V1\Blog\PostCreateRequest;
+use App\Http\Requests\API\V1\Blog\PostUpdateRequest;
 use App\Http\Resources\BlogPostCollection;
 use App\Http\Resources\BlogPostResource;
-use App\Models\BlogPost;
+use App\Models\Blog\Post;
 use Illuminate\Http\JsonResponse;
 use Str;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 class PostController extends BaseController
 {
     /**
-     * @var \App\Models\BlogPost
+     * @var \App\Models\Blog\Post
      */
     private mixed $blogPost;
 
@@ -23,7 +23,7 @@ class PostController extends BaseController
     {
         parent::__construct();
 
-        $this->blogPost = app(BlogPost::class);
+        $this->blogPost = app(Post::class);
     }
 
     /**
@@ -39,11 +39,11 @@ class PostController extends BaseController
     /**
      * Store a newly created resource in storage.
      *
-     * @param \App\Http\Requests\BlogPostCreateRequest $request
+     * @param \App\Http\Requests\Api\V1\Blog\PostCreateRequest $request
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(BlogPostCreateRequest $request): JsonResponse
+    public function store(PostCreateRequest $request): JsonResponse
     {
         $data = $request->validated();
 
@@ -51,7 +51,7 @@ class PostController extends BaseController
             $data['slug'] = Str::slug($data['title']);
         }
 
-        $entity = (new BlogPost())->create($data);
+        $entity = (new Post())->create($data);
 
         return (new BlogPostResource($entity))
             ->additional(['message' => __('Successfully created!')])
@@ -76,19 +76,15 @@ class PostController extends BaseController
     /**
      * Update the specified resource in storage.
      *
-     * @param \App\Http\Requests\BlogPostUpdateRequest $request
-     * @param int                                      $id
+     * @param \App\Http\Requests\Api\V1\Blog\PostUpdateRequest $request
+     * @param int                                              $id
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(BlogPostUpdateRequest $request, int $id): JsonResponse
+    public function update(PostUpdateRequest $request, int $id): JsonResponse
     {
         $entity = $this->blogPost->findOrFail($id);
         $data = $request->validated();
-
-        if (empty($data['slug'])) {
-            $data['slug'] = Str::slug($data['title']);
-        }
 
         $entity->update($data);
 

@@ -1,6 +1,7 @@
 <?php
 
-use App\Http\Controllers\Blog\Admin\CategoryController;
+use App\Http\Controllers\Dashboard\Blog\CategoryController;
+use App\Http\Controllers\Dashboard\Blog\PostController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,12 +19,16 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::group(['prefix' => 'admin/blog'], function () {
-    Route::resource('categories', CategoryController::class)->names('blog.admin.categories');
+Route::group(['prefix' => 'dashboard', 'middleware' => 'auth'], function () {
+    Route::group(['prefix' => 'blog'], function () {
+        Route::resource('categories', CategoryController::class)->names('dashboard.blog.categories');
+        Route::resource('posts', PostController::class)->names('dashboard.blog.posts');
+    });
+
+
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
-
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

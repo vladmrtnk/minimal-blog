@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Blog;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class BlogPostCreateRequest extends FormRequest
+class PostCreateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,13 +26,12 @@ class BlogPostCreateRequest extends FormRequest
         return [
             'title'        => 'required|min:5|max:200|unique:blog_posts',
             'slug'         => 'max:200|unique:blog_posts',
-            'user_id'      => 'required|integer|exists:users,id',
             'category_id'  => 'required|integer|exists:blog_categories,id',
             'excerpt'      => 'max:500',
-            'content_raw'  => 'required',
-            'content_html' => 'required',
+//            'content_raw'  => 'required',
             'is_published' => 'bool',
-            'published_at' => 'date'
+            'published_at' => 'date',
+            'content'      => ''
         ];
     }
 }

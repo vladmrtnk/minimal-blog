@@ -1,14 +1,14 @@
 <?php
 
-namespace Database\Factories;
+namespace Database\Factories\Blog;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Str;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\BlogPost>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Blog\Post>
  */
-class BlogPostFactory extends Factory
+class PostFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -28,8 +28,9 @@ class BlogPostFactory extends Factory
             'title'        => $title,
             'slug'         => Str::slug($title),
             'excerpt'      => $this->faker->text(rand(40, 100)),
-            'content_raw'  => $text,
-            'content_html' => $text,
+//            'content_raw'  => $text,
+//            'content_html' => $text,
+            'content' => $text,
             'is_published' => $isPublished,
             'published_at' => $isPublished ? $this->faker->dateTimeBetween('-2 months','-1 days')
                 : null,

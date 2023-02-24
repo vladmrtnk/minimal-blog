@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Repositories\Blog;
 
-use App\Models\BlogCategory as Model;
+use App\Models\Blog\Category as Model;
+use App\Repositories\CoreRepository;
 use Illuminate\Database\Eloquent\Collection;
 
-class BlogCategoryRepository extends CoreRepository
+class CategoryRepository extends CoreRepository
 {
     /**
      * @return string

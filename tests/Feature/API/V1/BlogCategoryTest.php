@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\API\V1;
 
-use App\Models\BlogCategory;
+use App\Models\Blog\Category;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -21,7 +21,7 @@ class BlogCategoryTest extends TestCase
 
     public function test_get_single_entity()
     {
-        $entity = BlogCategory::factory()->create();
+        $entity = Category::factory()->create();
 
         $response = $this->get($this->url . $entity->id);
 
